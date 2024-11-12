@@ -1,620 +1,580 @@
+
 <!DOCTYPE html>
-<html class="no-js" lang="en">
-   <head>
-      <meta charset="utf-8">
-      <script>
-         class RocketLazyLoadScripts{constructor(){this.triggerEvents=["keydown","mousedown","mousemove","touchmove","touchstart","touchend","wheel"],this.userEventHandler=this._triggerListener.bind(this),this.touchStartHandler=this._onTouchStart.bind(this),this.touchMoveHandler=this._onTouchMove.bind(this),this.touchEndHandler=this._onTouchEnd.bind(this),this.clickHandler=this._onClick.bind(this),this.interceptedClicks=[],window.addEventListener("pageshow",(e=>{this.persisted=e.persisted})),window.addEventListener("DOMContentLoaded",(()=>{this._preconnect3rdParties()})),this.delayedScripts={normal:[],async:[],defer:[]},this.allJQueries=[]}_addUserInteractionListener(e){document.hidden?e._triggerListener():(this.triggerEvents.forEach((t=>window.addEventListener(t,e.userEventHandler,{passive:!0}))),window.addEventListener("touchstart",e.touchStartHandler,{passive:!0}),window.addEventListener("mousedown",e.touchStartHandler),document.addEventListener("visibilitychange",e.userEventHandler))}_removeUserInteractionListener(){this.triggerEvents.forEach((e=>window.removeEventListener(e,this.userEventHandler,{passive:!0}))),document.removeEventListener("visibilitychange",this.userEventHandler)}_onTouchStart(e){"HTML"!==e.target.tagName&&(window.addEventListener("touchend",this.touchEndHandler),window.addEventListener("mouseup",this.touchEndHandler),window.addEventListener("touchmove",this.touchMoveHandler,{passive:!0}),window.addEventListener("mousemove",this.touchMoveHandler),e.target.addEventListener("click",this.clickHandler),this._renameDOMAttribute(e.target,"onclick","rocket-onclick"))}_onTouchMove(e){window.removeEventListener("touchend",this.touchEndHandler),window.removeEventListener("mouseup",this.touchEndHandler),window.removeEventListener("touchmove",this.touchMoveHandler,{passive:!0}),window.removeEventListener("mousemove",this.touchMoveHandler),e.target.removeEventListener("click",this.clickHandler),this._renameDOMAttribute(e.target,"rocket-onclick","onclick")}_onTouchEnd(e){window.removeEventListener("touchend",this.touchEndHandler),window.removeEventListener("mouseup",this.touchEndHandler),window.removeEventListener("touchmove",this.touchMoveHandler,{passive:!0}),window.removeEventListener("mousemove",this.touchMoveHandler)}_onClick(e){e.target.removeEventListener("click",this.clickHandler),this._renameDOMAttribute(e.target,"rocket-onclick","onclick"),this.interceptedClicks.push(e),e.preventDefault(),e.stopPropagation(),e.stopImmediatePropagation()}_replayClicks(){window.removeEventListener("touchstart",this.touchStartHandler,{passive:!0}),window.removeEventListener("mousedown",this.touchStartHandler),this.interceptedClicks.forEach((e=>{e.target.dispatchEvent(new MouseEvent("click",{view:e.view,bubbles:!0,cancelable:!0}))}))}_renameDOMAttribute(e,t,n){e.hasAttribute&&e.hasAttribute(t)&&(event.target.setAttribute(n,event.target.getAttribute(t)),event.target.removeAttribute(t))}_triggerListener(){this._removeUserInteractionListener(this),"loading"===document.readyState?document.addEventListener("DOMContentLoaded",this._loadEverythingNow.bind(this)):this._loadEverythingNow()}_preconnect3rdParties(){let e=[];document.querySelectorAll("script[type=rocketlazyloadscript]").forEach((t=>{if(t.hasAttribute("src")){const n=new URL(t.src).origin;n!==location.origin&&e.push({src:n,crossOrigin:t.crossOrigin||"module"===t.getAttribute("data-rocket-type")})}})),e=[...new Map(e.map((e=>[JSON.stringify(e),e]))).values()],this._batchInjectResourceHints(e,"preconnect")}async _loadEverythingNow(){this.lastBreath=Date.now(),this._delayEventListeners(),this._delayJQueryReady(this),this._handleDocumentWrite(),this._registerAllDelayedScripts(),this._preloadAllScripts(),await this._loadScriptsFromList(this.delayedScripts.normal),await this._loadScriptsFromList(this.delayedScripts.defer),await this._loadScriptsFromList(this.delayedScripts.async);try{await this._triggerDOMContentLoaded(),await this._triggerWindowLoad()}catch(e){}window.dispatchEvent(new Event("rocket-allScriptsLoaded")),this._replayClicks()}_registerAllDelayedScripts(){document.querySelectorAll("script[type=rocketlazyloadscript]").forEach((e=>{e.hasAttribute("src")?e.hasAttribute("async")&&!1!==e.async?this.delayedScripts.async.push(e):e.hasAttribute("defer")&&!1!==e.defer||"module"===e.getAttribute("data-rocket-type")?this.delayedScripts.defer.push(e):this.delayedScripts.normal.push(e):this.delayedScripts.normal.push(e)}))}async _transformScript(e){return await this._littleBreath(),new Promise((t=>{const n=document.createElement("script");[...e.attributes].forEach((e=>{let t=e.nodeName;"type"!==t&&("data-rocket-type"===t&&(t="type"),n.setAttribute(t,e.nodeValue))})),e.hasAttribute("src")?(n.addEventListener("load",t),n.addEventListener("error",t)):(n.text=e.text,t());try{e.parentNode.replaceChild(n,e)}catch(e){t()}}))}async _loadScriptsFromList(e){const t=e.shift();return t?(await this._transformScript(t),this._loadScriptsFromList(e)):Promise.resolve()}_preloadAllScripts(){this._batchInjectResourceHints([...this.delayedScripts.normal,...this.delayedScripts.defer,...this.delayedScripts.async],"preload")}_batchInjectResourceHints(e,t){var n=document.createDocumentFragment();e.forEach((e=>{if(e.src){const i=document.createElement("link");i.href=e.src,i.rel=t,"preconnect"!==t&&(i.as="script"),e.getAttribute&&"module"===e.getAttribute("data-rocket-type")&&(i.crossOrigin=!0),e.crossOrigin&&(i.crossOrigin=e.crossOrigin),n.appendChild(i)}})),document.head.appendChild(n)}_delayEventListeners(){let e={};function t(t,n){!function(t){function n(n){return e[t].eventsToRewrite.indexOf(n)>=0?"rocket-"+n:n}e[t]||(e[t]={originalFunctions:{add:t.addEventListener,remove:t.removeEventListener},eventsToRewrite:[]},t.addEventListener=function(){arguments[0]=n(arguments[0]),e[t].originalFunctions.add.apply(t,arguments)},t.removeEventListener=function(){arguments[0]=n(arguments[0]),e[t].originalFunctions.remove.apply(t,arguments)})}(t),e[t].eventsToRewrite.push(n)}function n(e,t){let n=e[t];Object.defineProperty(e,t,{get:()=>n||function(){},set(i){e["rocket"+t]=n=i}})}t(document,"DOMContentLoaded"),t(window,"DOMContentLoaded"),t(window,"load"),t(window,"pageshow"),t(document,"readystatechange"),n(document,"onreadystatechange"),n(window,"onload"),n(window,"onpageshow")}_delayJQueryReady(e){let t=window.jQuery;Object.defineProperty(window,"jQuery",{get:()=>t,set(n){if(n&&n.fn&&!e.allJQueries.includes(n)){n.fn.ready=n.fn.init.prototype.ready=function(t){e.domReadyFired?t.bind(document)(n):document.addEventListener("rocket-DOMContentLoaded",(()=>t.bind(document)(n)))};const t=n.fn.on;n.fn.on=n.fn.init.prototype.on=function(){if(this[0]===window){function e(e){return e.split(" ").map((e=>"load"===e||0===e.indexOf("load.")?"rocket-jquery-load":e)).join(" ")}"string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=e(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach((t=>{delete Object.assign(arguments[0],{[e(t)]:arguments[0][t]})[t]}))}return t.apply(this,arguments),this},e.allJQueries.push(n)}t=n}})}async _triggerDOMContentLoaded(){this.domReadyFired=!0,await this._littleBreath(),document.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._littleBreath(),window.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._littleBreath(),document.dispatchEvent(new Event("rocket-readystatechange")),await this._littleBreath(),document.rocketonreadystatechange&&document.rocketonreadystatechange()}async _triggerWindowLoad(){await this._littleBreath(),window.dispatchEvent(new Event("rocket-load")),await this._littleBreath(),window.rocketonload&&window.rocketonload(),await this._littleBreath(),this.allJQueries.forEach((e=>e(window).trigger("rocket-jquery-load"))),await this._littleBreath();const e=new Event("rocket-pageshow");e.persisted=this.persisted,window.dispatchEvent(e),await this._littleBreath(),window.rocketonpageshow&&window.rocketonpageshow({persisted:this.persisted})}_handleDocumentWrite(){const e=new Map;document.write=document.writeln=function(t){const n=document.currentScript,i=document.createRange(),r=n.parentElement;let o=e.get(n);void 0===o&&(o=n.nextSibling,e.set(n,o));const s=document.createDocumentFragment();i.setStart(s,0),s.appendChild(i.createContextualFragment(t)),r.insertBefore(s,o)}}async _littleBreath(){Date.now()-this.lastBreath>45&&(await this._requestAnimFrame(),this.lastBreath=Date.now())}async _requestAnimFrame(){return document.hidden?new Promise((e=>setTimeout(e))):new Promise((e=>requestAnimationFrame(e)))}static run(){const e=new RocketLazyLoadScripts;e._addUserInteractionListener(e)}}RocketLazyLoadScripts.run();
-      </script>
-         <link rel="apple-touch-icon" sizes="180x180" href="favicons/RM-transparent.png">
-         <link rel="icon" type="image/png" sizes="32x32" href="favicons/RM-transparent.png">
-         <link rel="icon" type="image/png" sizes="16x16" href="favicons/RM-transparent.png">
-         <link rel="shortcut icon" href="favicons/RM-transparent.png">
-         <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-      
-      <link rel="preconnect" href="https://fonts.gstatic.com">
-      <title>Building AI-driven organisations with machine learning solutions</title>
-      
-      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap" media="print" onload="this.media='all'">
-      <noscript>
-         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap">
-      </noscript>
-      <meta name="description" content="Ragminds solves business problems with advanced AI and Machine Learning Solutions for public and private sectors.">
+<html lang="en">
 
-      <link rel="dns-prefetch" href="//js.hs-scripts.com">
-      <link rel="dns-prefetch" href="//fonts.googleapis.com">
-      <link href="https://fonts.gstatic.com" crossorigin rel="preconnect">
-      <style id="global-styles-inline-css" type="text/css">
-         body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
-      </style>
-      <link rel="preload" href="/css/css-wppopups.css" data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type="text/css" media="all">
-      <link rel="preload" href="/css/css-wppopups-base.css" data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type="text/css" media="all">
-      <link rel="preload" href="/css/css-jquery.735e56526295a39b6334.min.css" data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type="text/css" media="all">
-      <link rel="preload" href="css/css-global.e8b76cdc5c454b910cac.min.css" data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type="text/css" media="all">
-      
-	  <style>
-		.logo__link:link { text-decoration: none !important; }
-		.logo__link:visited { text-decoration: none !important; }
-		.logo__link:hover { text-decoration: none !important; }
-		.logo__link:active { text-decoration: none !important; }
-		.header__main { padding-bottom: 40px;}
-	</style>
-   </head>
-   <body class="home page-template-default page page-id-11">
-      <script src="js/chat-web-sdk-v2.js"></script>
-      <div id="page">
-         <header class="header">
-            <div class="h-container header__container">
-               <div class="header__main">
-                  <div class="logo  header__logo">
-                     <a href="index.html" class="logo__content logo__link" aria-label="logo">
-                        <h1>Rag Minds</h1>
-                     </a>
-                  </div>
-                  <button type="button" class="header__toggle" aria-label="Menu" aria-expanded="false">
-                     <svg class="icon  header__toggle-icon header__toggle-icon--open" focusable="false">
-                        <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#menu"></use>
-                     </svg>
-                     <svg class="icon  header__toggle-icon header__toggle-icon--close" focusable="false">
-                        <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#close"></use>
-                     </svg>
-                  </button>
-               </div>
-               <div class="header__inner" tabindex="-1">
-                  <nav class="navigation  header__navigation" aria-label="Main menu">
-                     <ul class="navigation__list">
-                        <li class="navigation__item ">
-                           <a href="index.html" class="navigation__link">
-                           <span class="navigation__link-text">
-                           Home
-                           </span>
-                           </a>
+<head>
+    <meta charset="utf-8" />
+    <title>RAGMinds - AI-Powered Products & Solutions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Tailwind CSS AI Startup & Technology Saas & AI Software Landing Page Template, ai agency, ai application, ai business, ai, creative ai art, ai it solutions, modern web ai, multipurpose, saas, nft art, nft software, tailwind css." name="description" />
+    <meta content="coderthemes" name="author" />
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+    <!-- Style css -->
+    <link href="assets/css/style.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Icons css -->
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Animation on Scroll css -->
+    <link href="assets/libs/aos/aos.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="bg-default-900">
+    <div>
+        <div class="fixed top-0 -z-10">
+            <div class="blur-[200px] w-[500px] h-[500px] rounded-full bg-gradient-to-tl from-red-600/40 to-pink-600/40"></div>
+        </div>
+        <div class="fixed top-0 end-0 -z-10">
+            <div class="blur-[200px] w-[500px] h-[500px] rounded-full bg-gradient-to-tl from-red-600/40 to-pink-600/40"></div>
+        </div>
+        <div class="fixed inset-0 flex items-center justify-center -z-10">
+            <div class="blur-[200px] w-[500px] h-[500px] rounded-full bg-gradient-to-tl from-red-600/40 to-pink-600/40"></div>
+        </div>
+        <div class="fixed bottom-0 start-0 -z-10">
+            <div class="blur-[200px] w-[500px] h-[500px] rounded-full bg-gradient-to-tl from-red-600/40 to-pink-600/40"></div>
+        </div>
+        <div class="fixed bottom-0 end-0 -z-10">
+            <div class="blur-[200px] w-[500px] h-[500px] rounded-full bg-gradient-to-tl from-red-600/40 to-pink-600/40"></div>
+        </div>
+    </div><!-- end body bg gradient -->
+
+    <!-- Navbar Start -->
+    <header id="navbar-sticky" class="navbar">
+        <div class="container">
+            <nav>
+                <!-- Navbar Brand Logo -->
+                <a href="/" class="logo">
+                    <!-- <img src="assets/images/logo2-t.png" class="h-10" alt="RAGMinds Logo"> -->
+                     <h1 class="text-2xl font-medium text-white">RAGMinds</h1>
+                </a>
+
+                <!-- Moblie Menu Toggle Button (Offcanvas Button) -->
+                <div class="lg:hidden flex items-center ms-auto px-2.5">
+                    <button class="hs-collapse-toggle inline-flex items-center justify-center h-9 w-12 rounded-md border border-white/20 bg-default-100/5" type="button" id="hs-unstyled-collapse" data-hs-collapse="#mobileMenu" data-hs-type="collapse">
+                        <i data-lucide="menu" class="h-5 w-5 stroke-white"></i>
+                    </button>
+                </div>
+
+                <!-- Nevigation Menu -->
+                <div id="mobileMenu" class="hs-collapse transition-all duration-300 lg:basis-auto basis-full grow hidden lg:flex items-center justify-center mx-auto mt-2 lg:mt-0">
+                    <ul id="navbar-navlist" class="navbar-nav">
+                        <!-- Home Page Link -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#home">Home</a>
                         </li>
-                        <!-- <li class="navigation__item  has-children  menu-item-has-children">
-                           <a href="#" class="navigation__link" aria-expanded="false">
-                           <span class="navigation__link-text">
-                           AI Tools
-                           </span>
-                           </a>
-                           <ul class="navigation__list navigation__list--child">
-                              <li class="navigation__item ">
-                                 <a href="data-engineering-services.html" class="navigation__link">
-                                    <figure class="image image--fluid navigation__link-image">
-                                       <img loading="lazy" src="/images/askpdf.jpeg" data-sizes="auto" alt="" class="image__img lazyload">
-                                    </figure>
-                                    <span class="navigation__link-text">
-                                       Ask PDF
-                                       <svg class="icon  navigation__link-icon" focusable="false">
-                                          <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#arrow-right"></use>
-                                       </svg>
-                                    </span>
-                                 </a>
-                              </li>
-                              <li class="navigation__item ">
-                                 <a href="computer-vision-services.html" class="navigation__link">
-                                    <figure class="image image--fluid navigation__link-image">
-                                       <img loading="lazy" src="/images/computer-vision.jpg" data-sizes="auto" alt="cv2" class="image__img lazyload">
-                                    </figure>
-                                    <span class="navigation__link-text">
-                                       Computer Vision
-                                       <svg class="icon  navigation__link-icon" focusable="false">
-                                          <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#arrow-right"></use>
-                                       </svg>
-                                    </span>
-                                 </a>
-                              </li>
-                              <li class="navigation__item ">
-                                 <a href="custom-ai-solutions.html" class="navigation__link">
-                                    <figure class="image image--fluid navigation__link-image">
-                                       <img loading="lazy" src="/images/custom-ml.jpg" data-sizes="auto" alt="Ragminds hero" class="image__img lazyload">
-                                    </figure>
-                                    <span class="navigation__link-text">
-                                       Custom AI Solutions
-                                       <svg class="icon  navigation__link-icon" focusable="false">
-                                          <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#arrow-right"></use>
-                                       </svg>
-                                    </span>
-                                 </a>
-                              </li>
-                              <li class="navigation__item ">
-                                 <a href="nlp-services.html" class="navigation__link">
-                                    <figure class="image image--fluid navigation__link-image">
-                                       <img loading="lazy" src="/images/nlp-services.jpg" data-sizes="auto" alt="nlp services" class="image__img lazyload">
-                                    </figure>
-                                    <span class="navigation__link-text">
-                                       NLP Services
-                                       <svg class="icon  navigation__link-icon" focusable="false">
-                                          <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#arrow-right"></use>
-                                       </svg>
-                                    </span>
-                                 </a>
-                              </li>
-                           </ul>
+
+                        <!-- Service Page Link -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tools">Tools</a>
+                        </li>
+
+                        <!-- Features Page Link -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">Features</a>
+                        </li>
+
+                        <!-- Price Page Link -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="#price">Price</a>
                         </li> -->
-                        <li class="navigation__item  ">
-                           <a href="contact-us.html" class="navigation__link">
-                           <span class="navigation__link-text">
-                           Contact Us
-                           </span>
-                           </a>
-                        </li>
-                     </ul>
-                  </nav>
-               </div>
-            </div>
-         </header>
-         <main class="main">
-            <div class="main__hero">
-               <div class="hero hero--landing  hero--with-stats">
-                  <div class="h-container">
-                     <div class="grid hero__grid grid--no-vertical-gutter">
-                        <div class="hero__content-col grid__col grid__col--xs-12        grid__col--md-4">
-                           <div class="hero__content">
-                              <div class="hero__content-wrapper">
-                                 <h1 class="hero__title">Building <mark>AI-driven</mark> organizations</h1>
-                                 <div class="hero__text text">
-                                    <p style="text-align: left;">At Rag Minds, we harness the power of advanced AI and machine learning to solve complex business challenges. From public to private sectors, our innovative solutions bring efficiency, intelligence, and value to every project.</p>
-                                 </div>
-                              </div>
-                              <div class="grid hero__stats-grid">
-                                 <div class="grid__col grid__col--md-4 hero__stat-item">
-                                    <div class="hero__stat-number bold"></div>
-                                    <div class="hero__stat-text bold"></div>
-                                 </div>
-                                 <div class="grid__col grid__col--md-4 hero__stat-item">
-                                    <div class="hero__stat-number bold"></div>
-                                    <div class="hero__stat-text bold"></div>
-                                 </div>
-                                 <div class="grid__col grid__col--md-4 hero__stat-item">
-                                    <div class="hero__stat-number bold"></div>
-                                    <div class="hero__stat-text bold"></div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="grid__col grid__col--xs-12
-                           grid__col--md-8 hero__media-col">
-                           <div class="hero__media-column">
-                              <div class="hero__media ">
-                                 <div class="hero__item">
-                                    <figure class="image  hero__image">
-                                       <img loading="eager" src="/images/dp-42.png" alt="Ragminds hero" class="image__img ">
-                                    </figure>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="grid__col grid__col--md-9 hero__stats-col">
-                           <div class="grid hero__stats-grid hero__stats-grid--mobile">
-                              <div class="grid__col grid__col--md-4 hero__stat-item">
-                                 <div class="hero__stat-number bold"></div>
-                                 <div class="hero__stat-text bold"></div>
-                              </div>
-                              <div class="grid__col grid__col--md-4 hero__stat-item">
-                                 <div class="hero__stat-number bold"></div>
-                                 <div class="hero__stat-text bold"></div>
-                              </div>
-                              <div class="grid__col grid__col--md-4 hero__stat-item">
-                                 <div class="hero__stat-number bold"></div>
-                                 <div class="hero__stat-text bold"></div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="main__content">
 
-               <div class="section
-                  js-background
-                  section--mt-lg
-                  section--mb-lg
-                  " data-theme="white">
-                  <div class="h-container">
-                     <div class="grid grid--no-vertical-gutter">
-                        <div class="section__col grid__col">
-                           <div class="section__content">
-                              <div class="service-icons   service-icons--alt">
-                                 <div class="grid">
-                                    <div class="service-icons__title grid__col
-                                       grid__col--sm-7">
-                                       <div class="title   is-animated" data-text="Hire us to build custom AI and Machine Learning solutions">
-                                          <h2 class="title__title h2">Hire us to build custom AI and Machine Learning solutions</h2>
-                                          <div class="title__shadow h2">Hire us to build custom AI and Machine Learning solutions</div>
-                                       </div>
-                                    </div>
-                                    <div class="service-icons__icons grid__col
-                                       grid__col--sm-9 grid__col--offset-sm-2">
-                                       <div class="grid service-icons__item-grid">
-                                          <div class="grid__col grid__col--sm-4 service-icons__item">
-                                             <div class="service-icons__item-container">
-                                                <div class="service-icons__icon-container">
-                                                   <svg class="icon  service-icons__icon" focusable="false">
-                                                      <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#voice"></use>
-                                                   </svg>
-                                                </div>
-                                                <div class="service-icons__item-text">
-                                                   Natural Language Processing
-                                                </div>
-                                             </div>
-                                          </div>
-                                          <div class="grid__col grid__col--sm-4 service-icons__item">
-                                             <a href="computer-vision-services.html" class="service-icons__item-container">
-                                                <div class="service-icons__icon-container">
-                                                   <svg class="icon  service-icons__icon" focusable="false">
-                                                      <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#scan"></use>
-                                                   </svg>
-                                                </div>
-                                                <div class="service-icons__item-text">
-                                                   Computer Vision
-                                                </div>
-                                             </a>
-                                          </div>
-                                          <div class="grid__col grid__col--sm-4 service-icons__item">
-                                             <div class="service-icons__item-container">
-                                                <div class="service-icons__icon-container">
-                                                   <svg class="icon  service-icons__icon" focusable="false">
-                                                      <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#quote"></use>
-                                                   </svg>
-                                                </div>
-                                                <div class="service-icons__item-text">
-                                                   Speech Recognition
-                                                </div>
-                                             </div>
-                                          </div>
-                                          <div class="grid__col grid__col--sm-4 service-icons__item">
-                                             <a href="data-engineering-services.html" class="service-icons__item-container">
-                                                <div class="service-icons__icon-container">
-                                                   <svg class="icon  service-icons__icon" focusable="false">
-                                                      <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#route"></use>
-                                                   </svg>
-                                                </div>
-                                                <div class="service-icons__item-text">
-                                                   Data Engineering
-                                                </div>
-                                             </a>
-                                          </div>
-                                          <div class="grid__col grid__col--sm-4 service-icons__item">
-                                             <div class="service-icons__item-container">
-                                                <div class="service-icons__icon-container">
-                                                   <svg class="icon  service-icons__icon" focusable="false">
-                                                      <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#gear"></use>
-                                                   </svg>
-                                                </div>
-                                                <div class="service-icons__item-text">
-                                                   Custom AI Solutions
-                                                </div>
-                                             </div>
-                                          </div>
-                                          <div class="grid__col grid__col--sm-4 service-icons__item">
-                                             <div class="service-icons__item-container">
-                                                <div class="service-icons__icon-container">
-                                                   <svg class="icon  service-icons__icon" focusable="false">
-                                                      <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#shield"></use>
-                                                   </svg>
-                                                </div>
-                                                <div class="service-icons__item-text">
-                                                   Fraud and Anomaly Detection
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               
-               <div class="section
-                  js-background
-                  steps-carousel        section--mt-sm
-                  section--mb-lg
-                  section--background" id="industry-use-cases" data-theme="gray">
-                  <div class="h-container">
-                     <div class="grid grid--no-vertical-gutter">
-                        <div class="section__col grid__col">
-                           <div class="title  section__title is-animated" data-text="Industry use cases">
-                              <h2 class="title__title h2">Industry use cases</h2>
-                              <div class="title__shadow h2">Industry use cases</div>
-                           </div>
-                           <div class="section__content">
-                              <div class="steps-carousel__main js-steps-carousel-group ">
-                                 <div class="steps-carousel__buttons">
-                                    <button type="button" class="button button--icon-outline steps-carousel__button steps-carousel__button--left        button--icon            " aria-label="button">
-                                       <span class="button__inner">
-                                          <svg class="icon  button__icon" focusable="false">
-                                             <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#arrow-left"></use>
-                                          </svg>
-                                       </span>
-                                    </button>
-                                    <button type="button" class="button button--icon-outline steps-carousel__button steps-carousel__button--right        button--icon            " aria-label="button">
-                                       <span class="button__inner">
-                                          <svg class="icon  button__icon" focusable="false">
-                                             <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#arrow-right"></use>
-                                          </svg>
-                                       </span>
-                                    </button>
-                                 </div>
-                                 <div class="steps-carousel__items">
-                                    <div class="steps-carousel__item js-steps-carousel is-open" id="telecommunication">
-                                       <a href="#telecommunication" data-index="01" class="steps-carousel__header js-steps-carousel-control">
-                                          <div class="steps-carousel__title">Telecommunication</div>
-                                       </a>
-                                       <div class="steps-carousel__content js-steps-carousel-content">
-                                          <div class="steps-carousel__inner">
-                                             <figure class="image image--fluid steps-carousel__image">
-                                                <picture class="image__picture">
-                                                   <img loading="lazy" src="/images/mt_dp-43_telecom.png" data-sizes="auto" alt="ai in telecommunication" class="image__img lazyload">
-                                                   </source>
-                                                </picture>
-                                             </figure>
-                                             <div class="steps-carousel__text">
-                                                <div class="text">
-                                                   <p>Telecom operators use machine learning to improve customer satisfaction and increase network reliability. To name a few, telecoms can benefit from predictive modelling, process analysis, fraud detection, churn prediction, and dynamic resource allocation.</p>
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="steps-carousel__item js-steps-carousel " id="aviation-travel">
-                                       <a href="#aviation-travel" data-index="02" class="steps-carousel__header js-steps-carousel-control">
-                                          <div class="steps-carousel__title">Aviation / Travel</div>
-                                       </a>
-                                       <div class="steps-carousel__content js-steps-carousel-content">
-                                          <div class="steps-carousel__inner">
-                                             <figure class="image image--fluid steps-carousel__image">
-                                                <picture class="image__picture">
-                                                   <img loading="lazy" src="/images/mt_dp-43_aviation.png" data-sizes="auto" alt="ai in aviation" class="image__img lazyload">
-                                                   </source>
-                                                </picture>
-                                             </figure>
-                                             <div class="steps-carousel__text">
-                                                <div class="text">
-                                                   <p>The world&rsquo;s leading airlines use artificial intelligence to improve operational efficiency, avoid costly mistakes and increase customer satisfaction. Machine learning possibilities include fleet &amp; operations management, development of autonomous machines and processes, and predicting passenger behavior.</p>
+                        <!-- Faq Page Link -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="#faq">Faq</a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Contact</a>
+                        </li>
+                    </ul>
+                    <!-- Download Button -->
+                    <!-- <div class="lg:hidden flex items-center pt-4 mt-4 lg:pt-0 lg:mt-0 border-t border-white/10 lg:border-none">
+                        <a href="#" class="inline-flex items-center justify-center gap-2 bg-primary text-white py-2 px-6 rounded-full hover:bg-primary-hover transition-all duration-3"><i data-lucide="arrow-big-down-dash" class="h-5 w-5 me-2"></i> Download</a>
+                    </div> -->
+                </div>
+                <!-- Download Button -->
+                <!-- <div class="hidden lg:flex items-center">
+                    <a href="#" class="inline-flex items-center justify-center gap-2 bg-primary text-white py-2 px-6 rounded-full hover:bg-primary-hover transition-all duration-300"><i data-lucide="arrow-big-down-dash" class="h-5 w-5 me-2"></i> Download</a>
+                </div> -->
+            </nav><!-- end nav -->
+        </div>
+    </header>
+    <!-- Navbar End -->
 
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="steps-carousel__item js-steps-carousel " id="pharmaceuticals-healthcare">
-                                       <a href="#pharmaceuticals-healthcare" data-index="03" class="steps-carousel__header js-steps-carousel-control">
-                                          <div class="steps-carousel__title">Pharmaceuticals / Healthcare</div>
-                                       </a>
-                                       <div class="steps-carousel__content js-steps-carousel-content">
-                                          <div class="steps-carousel__inner">
-                                             <figure class="image image--fluid steps-carousel__image">
-                                                <picture class="image__picture">
-                                                   <img loading="lazy" src="/images/mt_dp-43_pharmacy.png" data-sizes="auto" alt="ai in healthcare" class="image__img lazyload">
-                                                   </source>
-                                                </picture>
-                                             </figure>
-                                             <div class="steps-carousel__text">
-                                                <div class="text">
-                                                   <p>There are many potential use cases for AI in the pharmaceuticals and healthcare industry, ranging from patient treatment to facilitating the R&amp;D process. Machine learning algorithms&rsquo; ability to analyze large sets of data and discover meaningful patterns makes it a perfect match for the pharma industry.</p>
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="steps-carousel__item js-steps-carousel " id="finance-and-banking">
-                                       <a href="#finance-and-banking" data-index="04" class="steps-carousel__header js-steps-carousel-control">
-                                          <div class="steps-carousel__title">Finance and Banking</div>
-                                       </a>
-                                       <div class="steps-carousel__content js-steps-carousel-content">
-                                          <div class="steps-carousel__inner">
-                                             <figure class="image image--fluid steps-carousel__image">
-                                                <picture class="image__picture">
-                                                   <img loading="lazy" src="/images/mt_dp-43_finance.png" data-sizes="auto" alt="ai in finance" class="image__img lazyload">
-                                                   </source>
-                                                </picture>
-                                             </figure>
-                                             <div class="steps-carousel__text">
-                                                <div class="text">
-                                                   <p>From algorithmic trading to customer retention, big players in the finance sector are using AI to gain a competitive advantage. AI can bring value across automated portfolio management, product recommendations, risk assessment, fraud detection, image recognition, and much more.</p>
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="steps-carousel__item js-steps-carousel " id="retail-and-e-commerce">
-                                       <a href="#retail-and-e-commerce" data-index="05" class="steps-carousel__header js-steps-carousel-control">
-                                          <div class="steps-carousel__title">Retail and E-commerce </div>
-                                       </a>
-                                       <div class="steps-carousel__content js-steps-carousel-content">
-                                          <div class="steps-carousel__inner">
-                                             <figure class="image image--fluid steps-carousel__image">
-                                                <picture class="image__picture">
-                                                   <img loading="lazy" src="/images/mt_dp-43_retail.png" data-sizes="auto" alt="ai in retail" class="image__img lazyload">
-                                                   </source>
-                                                </picture>
-                                             </figure>
-                                             <div class="steps-carousel__text">
-                                                <div class="text">
-                                                   <p>AI is probably the biggest opportunity companies have in current technology disruption. AI has come to stay and it&rsquo;s just starting to change the way companies do business. Unsure of how and where to invest to generate the greatest returns, most retailers have not taken advantage of what AI has to offer. Waiting is not a winning option. Retailers must dive into AI&rsquo;s full potential to survive in the next five years.</p>
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="steps-carousel__item js-steps-carousel " id="public-sector">
-                                       <a href="#public-sector" data-index="06" class="steps-carousel__header js-steps-carousel-control">
-                                          <div class="steps-carousel__title">Public Sector</div>
-                                       </a>
-                                       <div class="steps-carousel__content js-steps-carousel-content">
-                                          <div class="steps-carousel__inner">
-                                             <figure class="image image--fluid steps-carousel__image">
-                                                <picture class="image__picture">
-                                                   <img loading="lazy" src="/images/mt_dp-43_public-sectorv.png" data-sizes="auto" alt="ai in public sector" class="image__img lazyload">
-                                                   </source>
-                                                </picture>
-                                             </figure>
-                                             <div class="steps-carousel__text">
-                                                <div class="text">
-                                                   <p>99% of public services in Estonia are accessible as e-services, and Estonia continues to invest heavily in technology and AI for the public sector. Take a look at some of the most interesting artificial intelligence solutions for the government currently being explored in Estonia.</p>
-                                                   <p>&nbsp;</p>
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="section
-                  js-background
-                  section--mt-md
-                  section--mb-md
-                  section--background" id="bring-artificial-intelligence-to-your-company" data-theme="gray">
-                  <div class="h-container">
-                     <div class="grid grid--no-vertical-gutter">
-                        <div class="section__col grid__col">
-                           <div class="section__content">
-                              <div class="content-image  ">
-                                 <div class="grid grid--no-vertical-gutter ">
-                                    <div class="grid__col--middle-xs grid__col grid__col--last-xs grid__col--original-md grid__col--md-5 grid__col--offset-md-1 content-image__content">
-                                       <div class="title  content-image__title content-image__title--desktop is-animated" data-text="Bring Artificial Intelligence to your company">
-                                          <h3 class="title__title h3">Bring Artificial Intelligence to your company</h3>
-                                          <div class="title__shadow h3">Bring Artificial Intelligence to your company</div>
-                                       </div>
-                                       <div class="content-image__text text">
-                                          <p>Have a specific machine learning project in mind? Or are you just looking around to learn how AI could benefit your business? Either way, let&rsquo;s talk.</p>
-                                          <p>
-                                             <a href="contact-us.html" class="button">
-                                             <span class="button__inner">
-                                             <span class="button__text">Contact us</span>
-                                             </span>
-                                             </a>
-                                          </p>
-                                       </div>
-                                    </div>
-                                    <div class="grid__col grid__col--middle-xs grid__col--md-4 grid__col--offset-md-1">
-                                       <figure class="image  content-image__image">
-                                          <picture class="image__picture">
-                                             <source srcset="/images/professional.png media="(min-width: 768px)">
-                                             <img loading="lazy" src="/images/professional.png" data-sizes="auto" alt="Ayman Khalil Ragminds" class="image__img lazyload">
-                                             </source>
-                                          </picture>
-                                       </figure>
-                                       <div class="title  content-image__title is-animated" data-text="Bring Artificial Intelligence to your company">
-                                          <h3 class="title__title h3">Bring Artificial Intelligence to your company</h3>
-                                          <div class="title__shadow h3">Bring Artificial Intelligence to your company</div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
+    <!-- Hero Section Start -->
+    <section id="home" class="relative overflow-hidden pt-40 pb-20" data-aos="zoom-out" data-aos-easing="ease" data-aos-duration="1000">
+        <div class="absolute h-14 w-14 bg-primary/10 top-1/2 start-80 -z-1 rounded-2xl rounded-tl-none rounded-br-none animate-[spin_10s_linear_infinite]"></div>
+        <div class="absolute h-14 w-14 bg-primary/20 top-1/2 end-80 -z-1 rounded-full animate-ping"></div>
+        <div class="container">
+            <div class="text-center">
+                <div class="flex justify-center mt-6">
+                    <div class="max-w-2xl">
+                        <h1 class="text-5xl/tight text-default-100 font-medium mb-6">AI Solutions Tailored for Your Business and Personal Needs</h1>
+                        <p class="text-base text-default-300 font-medium lg:max-w-md mx-auto">Empower your business and daily personal tasks with our LLM and Computer Vision tools.</p>
+                    </div>
+                </div>
+
+                <!-- <div>
+                    <button data-hs-overlay="#watchvideomodal" class="relative flex items-center justify-center gap-2.5 rounded-full text-base font-medium py-3.5 px-6 mt-10 mx-auto bg-primary/40 text-white transition-all duration-300 ring-4 ring-primary/25 hover:bg-primary">
+                        <i data-lucide="play" class="h-6 w-6"></i>
+                        Watch Video
+                    </button>
+                </div> -->
             </div>
-         </main>
-         <footer class="footer js-background" data-theme="gray">
-            <div class="h-container">
-               <div class="grid">
-                  <div class="grid__col grid__col--md-3">
-                     <div class="logo logo--footer footer__logo">
-                        <a href="index.html" class="logo__content logo__link" aria-label="logo">
-							<h1>Rag Minds</h1>
-                        </a>
-                     </div>
+        </div><!-- Container End -->
+    </section>
+    <!-- Hero end -->
+
+    <!-- Start tools -->
+    <section id="tools" class="py-20" data-aos="zoom-in" data-aos-easing="ease" data-aos-duration="1000">
+      <div class="container">
+          <div class="flex items-end justify-between mb-10">
+              <div class="max-w-2xl mx-auto text-center">
+                  <h2 class="text-3xl font-medium capitalize text-white mb-4">Our AI Tools</h2>
+                  <p class="text-sm text-default-200 font-medium">explore each product’s capabilities.</p>
+              </div>
+          </div><!-- end flex -->
+          <div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-6">
+              <div class="bg-default-950/40 rounded-xl backdrop-blur-3xl">
+                  <div class="p-6">
+                      <div class="flex items-center gap-4 mb-4">
+                          <div class="inline-flex items-center justify-center h-10 w-10 bg-red-500/20 text-red-500 rounded-lg">
+                              <i data-lucide="dribbble" class="h-6 w-6"></i>
+                          </div>
+                          <h3 class="text-xl font-medium text-default-200">AI Chatbot</h3>
+                      </div>
+
+                      <p class="text-sm text-default-100 mb-4">An AI-powered chatbot that provides accurate responses from your internal data. Integrate it seamlessly into your platform.</p>
+
+                      <a href="#" class="inline-flex gap-2 items-center relative text-primary group">
+                          <span class="absolute h-px w-7/12 group-hover:w-full transition-all duration-500 rounded bg-primary/80 -bottom-0"></span>
+                          Select & try <i data-lucide="move-right" class="h-4 w-4"></i>
+                      </a>
                   </div>
-                  <div class="grid__col grid__col--md-12 grid__col--lg-9">
-                     <div class="grid grid--compressed">
-                        <div class="footer__content-col grid__col grid__col--lg-9">
-                           <div class="text">
-                              <p>Our mission is to solve business problems around the globe for public and private organizations using AI and machine learning. We develop tailored solutions for our customers or offer them existing tools from our suite of developed products.</p>
-                           </div>
-                        </div>
-                     </div>
+              </div><!-- end grid-cols -->
+              <div class="bg-default-950/40 rounded-xl backdrop-blur-3xl">
+                  <div class="p-6">
+                      <div class="flex items-center gap-4 mb-4">
+                          <div class="inline-flex items-center justify-center h-10 w-10 bg-sky-500/20 text-sky-500 rounded-lg">
+                              <i data-lucide="component" class="h-6 w-6"></i>
+                          </div>
+                          <h3 class="text-xl font-medium text-default-200">Face Analyses, Recognition & Identification</h3>
+                      </div>
+
+                      <p class="text-sm text-default-100 mb-4">Analyse face of the picture or camera with the capability to identify the person of the face</p>
+
+                      <a href="#" class="inline-flex gap-2 items-center relative text-primary group">
+                          <span class="absolute h-px w-7/12 group-hover:w-full transition-all duration-500 rounded bg-primary/80 -bottom-0"></span>
+                          Select & try <i data-lucide="move-right" class="h-4 w-4"></i>
+                      </a>
                   </div>
-                  <div class="grid__col grid__col--lg-9 grid__col--bottom-lg grid__col--last-lg">
-                     <div class="grid grid--middle-xs grid--compressed">
-                        <div class="grid__col grid__col--md-6 grid__col--lg-6">
-                           <div class="text">
-                              <p>Are you looking around to learn how AI could benefit your business? Let&rsquo;s talk.</p>
-                           </div>
-                        </div>
-                     </div>
+              </div><!-- end grid-cols -->
+              <div class="bg-default-950/40 rounded-xl backdrop-blur-3xl">
+                  <div class="p-6">
+                      <div class="flex items-center gap-4 mb-4">
+                          <div class="inline-flex items-center justify-center h-10 w-10 bg-default-500/20 text-default-500 rounded-lg">
+                              <i data-lucide="code-2" class="h-6 w-6"></i>
+                          </div>
+                          <h3 class="text-xl font-medium text-default-200">Chat with Your PDF</h3>
+                      </div>
+
+                      <p class="text-sm text-default-100 mb-4">Upload PDFs and engage with the content using our AI-powered PDF-based chatbot.</p>
+
+                      <a href="#" class="inline-flex gap-2 items-center relative text-primary group">
+                          <span class="absolute h-px w-7/12 group-hover:w-full transition-all duration-500 rounded bg-primary/80 -bottom-0"></span>
+                          Select & try <i data-lucide="move-right" class="h-4 w-4"></i>
+                      </a>
                   </div>
-                  <div class="grid__col grid__col--lg-3">
-                     <ul class="footer__contacts-list">
-                        <li class="footer__contacts-item">
-                           <a class="footer__contacts-link" href="tel:+905050102251">
-                              <svg class="icon  footer__contacts-icon" focusable="false">
-                                 <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#phone"></use>
-                              </svg>
-                              <span class="footer__contacts-text">+90 505 010 22 51</span>
-                           </a>
-                        </li>
-                        <li class="footer__contacts-item">
-							<svg class="icon  footer__contacts-icon" focusable="false">
-                                 <use xlink:href="/images/global.8ed5bddfe8e0851dfcbee11c2d730599.svg#mail"></use>
-                              </svg>
-                              <span class="footer__contacts-text">info@ragminds.com</span>
-                        </li>
-                     </ul>
-                  </div>
-                  <div class="grid__col grid__col--last-xs footer__play-and-nope">
-                     <div class="footer-play-nope__inner">
-                        <p class="footer-play-nope__powered-by"> Powered by Ragminds</p>
-                     </div>
-                  </div>
-               </div>
+              </div><!-- end grid-cols -->
             </div>
-         </footer>
-         <div class="notification-list"></div>
+          </div>
       </div>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/vendor-regenerator-runtime.min.js" id="regenerator-runtime-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/vendor-wp-polyfill.min.js" id="wp-polyfill-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/dist-dom-ready.min.js" id="wp-dom-ready-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/dist-hooks.min.js" id="wp-hooks-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/dist-i18n.min.js" id="wp-i18n-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" id="wp-i18n-js-after">
-         wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
-      </script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" id="wp-a11y-js-translations">
-         ( function( domain, translations ) {
-         	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
-         	localeData[""].domain = domain;
-         	wp.i18n.setLocaleData( localeData, domain );
-         } )( "default", { "locale_data": { "messages": { "": {} } } } );
-      </script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/dist-a11y.min.js" id="wp-a11y-js"></script>
-      <script type="text/javascript" id="core-js-extra">
-         /* <![CDATA[ */
-         var gotoAndPlay = {};
-         /* ]]> */
-      </script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/js-core.b3989065d99afe9d6057.min.js" id="core-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/js-jquery.735e56526295a39b6334.min.js" id="webpack-jquery-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/js-global.e8b76cdc5c454b910cac.min.js" id="jquery-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" defer src="js/js-jquery.json.min.js" id="gform_json-js"></script>
+  </section>
+  <!-- End Tools -->
 
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" defer src="js/js-gravityforms.min.js" id="gform_gravityforms-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" defer src="js/js-placeholders.jquery.min.js" id="gform_placeholder-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/js-wppopups.js" id="wppopups-js"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/5314383.js" async defer id="hs-script-loader"></script>
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/js-wppopups.js" id="wppopups-pro-js-js"></script>
+    <!-- Start features -->
+    <section id="features" class="py-20">
+        <div class="container">
+            <div class="flex items-end justify-between mb-10">
+                <div class="max-w-2xl mx-auto text-center">
+                    <h2 class="text-3xl font-medium capitalize text-white mb-4">Advanced Features</h2>
+                    <p class="text-sm text-default-200 font-medium">Discover the powerful features that make our products ideal for businesses of all sizes.</p>
+                </div>
+            </div><!-- end flex -->
+            <div class="grid lg:grid-cols-3 gap-6 mt-10">
+              <!-- Feature Items -->
+              <div class="bg-default-950/40 rounded-xl p-10 backdrop-blur-3xl">
+                  <h3 class="text-xl font-medium text-white mb-4">Customization</h3>
+                  <p class="text-sm text-default-100">Tailor our AI solutions to match your brand and meet your specific business needs.</p>
+              </div>
+              <div class="bg-default-950/40 rounded-xl p-10 backdrop-blur-3xl">
+                  <h3 class="text-xl font-medium text-white mb-4">Real-Time Data</h3>
+                  <p class="text-sm text-default-100">AI solutions powered by real-time data analysis and insights.</p>
+              </div>
+              <div class="bg-default-950/40 rounded-xl p-10 backdrop-blur-3xl">
+                  <h3 class="text-xl font-medium text-white mb-4">Easy Integration</h3>
+                  <p class="text-sm text-default-100">Integrate easily with your existing systems without complex setup or delays.</p>
+              </div>
+          </div>
+        </div><!-- end container -->
+    </section>
+    <!-- end features -->
 
+    <!-- Start Price -->
+    <!-- <section id="price" class="py-20">
+        <div class="container">
+            <div class="lg:flex gap-10">
+                <div class="flex flex-col items-center xl:items-start mb-10 lg:ms-0" data-aos="fade-right" data-aos-easing="ease" data-aos-duration="1000">
+                    <h1 class="text-2xl font-medium capitalize lg:text-3xl text-white">Our Pricing Plan</h1>
 
-      <script type="rocketlazyloadscript" data-rocket-type="text/javascript" src="js/jquery-jquery-migrate.min.js" id="jquery-migrate-js"></script>
-      <div class="wppopups-whole" style="display: none"></div>
-      <noscript>
-         <link rel="stylesheet" id="wppopups-pro-css" href="css/css-wppopups.css" type="text/css" media="all">
-         <link rel="stylesheet" id="wppopups-base-css" href="css/css-wppopups-base.css" type="text/css" media="all">
-         <link rel="stylesheet" id="jquery-css" href="css/css-jquery.735e56526295a39b6334.min.css" type="text/css" media="all">
-         <link rel="stylesheet" id="global-css" href="css/css-global.e8b76cdc5c454b910cac.min.css" type="text/css" media="all">
-      </noscript>
-   </body>
+                    <div class="mt-2">
+                        <span class="inline-block w-40 h-1 bg-primary rounded-full"></span>
+                        <span class="inline-block w-3 h-1 mx-1 bg-primary rounded-full"></span>
+                        <span class="inline-block w-1 h-1 bg-primary rounded-full"></span>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-4 mt-4">
+                        <span class="text-base text-white">Monthly</span>
+                        <label for="pricing-input" class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="pricing-input" value="" class="sr-only peer">
+                            <span class="w-11 h-4 bg-default-700 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-default-950 after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:left-[2px] after:border-default-950 after:border after:rounded-full after:h-5 after:w-5 after:transition-all after:ring-2 after:ring-offset-2 after:ring-offset-default-950 after:ring-primary after:bg-primary"></span>
+                        </label>
+                        <span class="text-base text-white">Yearly</span>
+                    </div>
+
+                    <p class="mt-4 font-medium text-default-200 mb-6">
+                        You can get All Access by selecting your plan!
+                    </p>
+
+                    <a href="#" class="inline-flex gap-2 items-center relative text-primary group">
+                        <span class="absolute h-px w-7/12 group-hover:w-full transition-all duration-500 rounded bg-primary/80 -bottom-0"></span>
+                        Select &amp; try <i data-lucide="move-right" class="h-4 w-4"></i>
+                    </a>
+                </div>
+
+                <div class="flex-1" data-aos="fade-left" data-aos-easing="ease" data-aos-duration="1000">
+                    <div class="flex items-center justify-center flex-col md:flex-row gap-x-4 gap-y-8">
+                        <div class="border rounded-lg border-white/10 bg-default-950/40 backdrop-blur-3xl">
+                            <div class="p-6">
+                                <h1 class="text-xl font-medium text-default-100 capitalize lg:text-2xl">Essential</h1>
+
+                                <p class="mt-4 text-default-300">
+                                    Our new Customers for a free one month of service offers.
+                                </p>
+
+                                <h2 class="mt-4 text-2xl font-semibold text-default-200 sm:text-3xl">$19.00 <span class="text-base font-medium">/Month</span></h2>
+
+                                <p class="mt-1 text-default-300">
+                                    Monthly payment
+                                </p>
+
+                                <button class="w-full px-4 py-2 mt-6 tracking-wide text-primary capitalize transition-colors duration-300 transform bg-primary/20 rounded-md hover:bg-primary hover:text-white focus:text-white focus:outline-none focus:bg-primary">
+                                    Start Now
+                                </button>
+                            </div>
+
+                            <hr class="border-white/10">
+
+                            <div class="p-6">
+                                <h1 class="text-lg font-medium text-white capitalize lg:text-xl">What’s included:</h1>
+
+                                <div class="mt-8 space-y-4">
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">All limited links</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">Own analytics platform</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">Chat support</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">Optimize hashtags</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="x-circle" class="w-5 h-5 text-red-500"></i>
+                                        <span class="text-default-300">Mobile app</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="x-circle" class="w-5 h-5 text-red-500"></i>
+                                        <span class="text-default-300">Unlimited users</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border rounded-lg border-white/10 bg-default-950/40 backdrop-blur-3xl">
+                            <div class="p-6">
+                                <h1 class="text-xl font-medium text-default-100 capitalize lg:text-2xl">Premium</h1>
+
+                                <p class="mt-4 text-default-300">
+                                    Our new Customers for a free one month of service offers.
+                                </p>
+
+                                <h2 class="mt-4 text-2xl font-semibold text-default-200 sm:text-3xl">$29.00 <span class="text-base font-medium">/Month</span></h2>
+
+                                <p class="mt-1 text-default-300">
+                                    Monthly payment
+                                </p>
+
+                                <button class="w-full px-4 py-2 mt-6 tracking-wide text-primary capitalize transition-colors duration-300 transform bg-primary/20 rounded-md hover:bg-primary hover:text-white focus:text-white focus:outline-none focus:bg-primary">
+                                    Start Now
+                                </button>
+                            </div>
+
+                            <hr class="border-white/10">
+
+                            <div class="p-6">
+                                <h1 class="text-lg font-medium text-white capitalize lg:text-xl">What’s included:</h1>
+
+                                <div class="mt-8 space-y-4">
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">All limited links</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">Own analytics platform</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">Chat support</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">Optimize hashtags</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">Mobile app</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-primary"></i>
+                                        <span class="text-default-300">Unlimited users</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+    <!-- end Price -->
+
+    <!-- Start Faq -->
+    <!-- <section id="faq" class="py-20">
+        <div class="container">
+            <div class="flex items-end justify-between mb-10">
+                <div class="max-w-2xl mx-auto text-center">
+                    <h2 class="text-3xl font-medium capitalize text-white mb-4">Any questions</h2>
+                    <p class="text-sm text-default-200 font-medium">Start working with Tailwindcss It allows you to compose complex designs <br> by combining and customizing utility classes..</p>
+                </div>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+                <div class="hs-accordion-group space-y-4">
+                    <div class="hs-accordion border border-white/10 bg-default-950/40 backdrop-blur-3xl rounded-lg overflow-hidden active" id="faq-1" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="1000">
+                        <button class="hs-accordion-toggle capitalize px-6 py-4 inline-flex items-center justify-between gap-x-3 w-full text-left text-white transition-all" aria-controls="faq-accordion-1">
+                            <h5 class="text-base font-semibold flex">
+                                <i data-lucide="help-circle" class="h-5 w-5 stroke-white align-middle me-3"></i>
+                                Who are produces sit pleasure?
+                            </h5>
+                            <i data-lucide="chevron-up" class="h-4 w-4 transition-all duration-500 hs-accordion-active:-rotate-180"></i>
+                        </button>
+                        <div id="faq-accordion-1" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300" aria-labelledby="faq-1">
+                            <div class="px-6 pb-4 pt-0">
+                                <p class="text-default-300 text-sm font-medium mb-2">
+                                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+                                </p>
+                                <p class="text-default-300 text-sm font-medium">
+                                    Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hs-accordion border border-white/10 bg-default-950/40 backdrop-blur-3xl rounded-lg overflow-hidden" id="faq-2" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="1000">
+                        <button class="hs-accordion-toggle capitalize px-6 py-4 inline-flex items-center justify-between gap-x-3 w-full text-left text-white transition-all" aria-controls="faq-2">
+                            <h5 class="text-base font-semibold flex">
+                                <i data-lucide="help-circle" class="h-5 w-5 stroke-white align-middle me-3"></i>
+                                What is quo voluptas nulla pariatur?
+                            </h5>
+                            <i data-lucide="chevron-up" class="h-4 w-4 transition-all duration-500 hs-accordion-active:-rotate-180"></i>
+                        </button>
+                        <div id="faq-2" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="faq-2">
+                            <div class="px-6 pb-4 pt-0">
+                                <p class="text-default-300 text-sm font-medium mb-2">
+                                    Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.
+                                </p>
+                                <p class="text-default-300 text-sm font-medium">
+                                    Duis leo. Sed fringilla mauris sit amet nibh.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hs-accordion border border-white/10 bg-default-950/40 backdrop-blur-3xl rounded-lg overflow-hidden" id="faq-3" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="1000">
+                        <button class="hs-accordion-toggle capitalize px-6 py-4 inline-flex items-center justify-between gap-x-3 w-full text-left text-white transition-all" aria-controls="faq-3">
+                            <h5 class="text-base font-semibold flex">
+                                <i data-lucide="help-circle" class="h-5 w-5 stroke-white align-middle me-3"></i>
+                                How to do transactions using iMbank?
+                            </h5>
+                            <i data-lucide="chevron-up" class="h-4 w-4 transition-all duration-500 hs-accordion-active:-rotate-180"></i>
+                        </button>
+                        <div id="faq-3" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="faq-3">
+                            <div class="px-6 pb-4 pt-0">
+                                <p class="text-default-300 text-sm font-medium mb-2">
+                                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+                                </p>
+                                <p class="text-default-300 text-sm font-medium">
+                                    Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hs-accordion border border-white/10 bg-default-950/40 backdrop-blur-3xl rounded-lg overflow-hidden" id="faq-4" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="1000">
+                        <button class="hs-accordion-toggle capitalize px-6 py-4 inline-flex items-center justify-between gap-x-3 w-full text-left text-white transition-all" aria-controls="faq-4">
+                            <h5 class="text-base font-semibold flex">
+                                <i data-lucide="help-circle" class="h-5 w-5 stroke-white align-middle me-3"></i>
+                                hot to activate iMbank service?
+                            </h5>
+                            <i data-lucide="chevron-up" class="h-4 w-4 transition-all duration-500 hs-accordion-active:-rotate-180"></i>
+                        </button>
+                        <div id="faq-4" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="faq-4">
+                            <div class="px-6 pb-4 pt-0">
+                                <p class="text-default-300 text-sm font-medium mb-2">
+                                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+                                </p>
+                                <p class="text-default-300 text-sm font-medium">
+                                    Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hs-accordion border border-white/10 bg-default-950/40 backdrop-blur-3xl rounded-lg overflow-hidden" id="faq-5" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="1000">
+                        <button class="hs-accordion-toggle capitalize px-6 py-4 inline-flex items-center justify-between gap-x-3 w-full text-left text-white transition-all" aria-controls="faq-5">
+                            <h5 class="text-base font-semibold flex">
+                                <i data-lucide="help-circle" class="h-5 w-5 stroke-white align-middle me-3"></i>
+                                Who is eligible to open iMbank account?
+                            </h5>
+                            <i data-lucide="chevron-up" class="h-4 w-4 transition-all duration-500 hs-accordion-active:-rotate-180"></i>
+                        </button>
+                        <div id="faq-5" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="faq-5">
+                            <div class="px-6 pb-4 pt-0">
+                                <p class="text-default-300 text-sm font-medium mb-2">
+                                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+                                </p>
+                                <p class="text-default-300 text-sm font-medium">
+                                    Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hs-accordion border border-white/10 bg-default-950/40 backdrop-blur-3xl rounded-lg overflow-hidden" id="faq-6" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="1000">
+                        <button class="hs-accordion-toggle capitalize px-6 py-4 inline-flex items-center justify-between gap-x-3 w-full text-left text-white transition-all" aria-controls="faq-6">
+                            <h5 class="text-base font-semibold flex">
+                                <i data-lucide="help-circle" class="h-5 w-5 stroke-white align-middle me-3"></i>
+                                wil i be given a passbook?
+                            </h5>
+                            <i data-lucide="chevron-up" class="h-4 w-4 transition-all duration-500 hs-accordion-active:-rotate-180"></i>
+                        </button>
+                        <div id="faq-6" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="faq-6">
+                            <div class="px-6 pb-4 pt-0">
+                                <p class="text-default-300 text-sm font-medium mb-2">
+                                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+                                </p>
+                                <p class="text-default-300 text-sm font-medium">
+                                    Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+    <!-- End faq -->
+
+    <!-- Start Contact Section -->
+    <section id="contact" class="py-20">
+      <div class="container text-center">
+          <h2 class="text-3xl font-medium capitalize text-white mb-4">Contact Us</h2>
+          <p class="text-sm text-default-200 font-medium mb-10">We’re here to answer your questions. Feel free to reach out to us!</p>
+          
+          <div class="max-w-2xl mx-auto text-left bg-default-950/40 backdrop-blur-3xl rounded-xl p-6">
+              <h3 class="text-xl font-medium text-default-200 mb-4">Get in Touch</h3>
+              <ul class="space-y-4">
+                  <li class="text-default-300"><strong>Mobile (Whatsapp):</strong> +90 505 010 22 51</li>
+                  <li class="text-default-300"><strong>Email:</strong> info@ragminds.com</li>
+                  <li class="text-default-300"><strong>Address:</strong> Istanbul / Turkey</li>
+              </ul>
+          </div>
+      </div>
+  </section>
+  <!-- End Contact Section -->
+
+    <!-- Footer section start -->
+    <footer class="bg-default-950/40 backdrop-blur-3xl">
+      <div class="container py-20">
+          <div class="text-center">
+              <p class="text-base font-medium text-default-400">
+                  <script>document.write(new Date().getFullYear())</script> © RAGMinds - AI Solutions by Ragminds
+              </p>
+          </div>
+      </div>
+  </footer>
+    <!-- Footer section End -->
+
+    <!-- Back To Top Start -->
+    <button id="back-to-top" onclick="topFunction()" class="fixed text-xl rounded-full z-10 bottom-5 end-5 h-8 w-8 text-center bg-white backdrop-blur-3xl text-default-950 flex justify-center items-center transition-all duration-500 hover:bg-primary hover:text-white hover:rounded-lg">
+        <i data-lucide="chevron-up" class="h-4 w-4"></i>
+    </button>
+    <!-- Back To Top End -->
+
+    <!-- Watch Video Modal Start -->
+    <div id="watchvideomodal" class="hs-overlay hidden w-full h-full fixed top-0 left-0 z-[60] overflow-x-hidden overflow-y-auto">
+        <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 duration-500 mt-0 opacity-0 ease-in-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
+            <div class="flex flex-col w-full shadow-sm rounded-xl overflow-hidden">
+                <iframe width="100%" height="400" src="https://www.youtube.com/embed/5wOhrU2V-SI?si=vCWHEfjx8d-ZgKVp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    <!-- Watch Video Modal End -->
+
+    <!-- Plugin Js -->
+    <script src="assets/libs/preline/preline.js"></script>
+
+    <!-- Gumshoejs -->
+    <script src="assets/libs/gumshoejs/gumshoe.polyfills.min.js"></script>
+
+    <!-- Lucid Icons -->
+    <script src="assets/libs/lucide/umd/lucide.min.js"></script>
+
+    <!-- Animation on Scroll Plugin Js -->
+    <script src="assets/libs/aos/aos.js"></script>
+
+    <!-- Theme Js -->
+    <script src="assets/js/theme.js"></script>
+
+</body>
+
 </html>
